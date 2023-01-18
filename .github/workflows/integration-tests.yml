@@ -61,4 +61,4 @@ jobs:
           command: test
           args: -- --nocapture --color always
       - name: Clean up Docker containers used for testing.
-        run: docker system prune -f -a --volumes
+        run: ./tests/docker/cleanup-docker.sh
