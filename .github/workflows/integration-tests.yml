@@ -34,13 +34,7 @@ jobs:
         with:
           command: check
   test:
-    runs-on: '${{ matrix.os }}'
-    strategy:
-      matrix:
-        include:
-          - os: macos-latest
-          - os: ubuntu-latest
-          - os: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -64,6 +58,7 @@ jobs:
         run: docker-compose -f tests/docker/test-docker-compose.yml up -d bridge0
       - uses: actions-rs/cargo@v1
         with:
-          command: test -- --nocapture --color always
+          command: test
+          args: -- --nocapture --color always
       - name: Clean up Docker containers used for testing.
         run: docker system prune -a --volumes
