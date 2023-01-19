@@ -6,7 +6,7 @@ name: Test Rust Celestia Node Client
 on:
   push:
     branches:
-      - '*'
+      - main
   pull_request: null
 jobs:
   check:
