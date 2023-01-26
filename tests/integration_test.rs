@@ -4,7 +4,7 @@ use bytes::Bytes;
 use rand::Rng;
 
 use rs_cnc::{CelestiaNodeClient, NamespacedDataResponse, PayForDataResponse};
-
+use rs_cnc::error::*;
 
 #[tokio::test]
 async fn test_data_roundtrip() {
@@ -17,7 +17,7 @@ async fn test_data_roundtrip() {
     // create arbitrary vector of bytes
     let data = Bytes::from(&b"some random data"[..]);
 
-    let res: Result<PayForDataResponse, reqwest::Error> = client.submit_pay_for_data(
+    let res: Result<PayForDataResponse> = client.submit_pay_for_data(
         &random_namespace_id,
         &data,
         2_000,
@@ -27,7 +27,7 @@ async fn test_data_roundtrip() {
 
     // use height from previous response to call namespaced data endpoint
     if let Some(height) = res.unwrap().height {
-        let res: Result<NamespacedDataResponse, reqwest::Error> = client.namespaced_data(random_namespace_id, height).await;
+        let res: Result<NamespacedDataResponse> = client.namespaced_data(random_namespace_id, height).await;
         assert!(res.is_ok());
 
         if let namespaced_data_response = res.unwrap() {
