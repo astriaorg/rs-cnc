@@ -1,5 +1,6 @@
 extern crate base64;
 
+use base64::{Engine as _, engine::general_purpose};
 use bytes::Bytes;
 use rand::Rng;
 
@@ -30,14 +31,15 @@ async fn test_data_roundtrip() {
         let res: Result<NamespacedDataResponse> = client.namespaced_data(random_namespace_id, height).await;
         assert!(res.is_ok());
 
-        if let namespaced_data_response = res.unwrap() {
-            // convert base64 encoded value from the response into a vector of bytes
-            let res_data = namespaced_data_response.data.unwrap();
-            let base64_data = &res_data[0];
-            let bytes = base64::decode(base64_data).unwrap();
+        let namespaced_data_response = res.unwrap();
+        // convert base64 encoded value from the response into a vector of bytes
+        let res_data = namespaced_data_response.data.unwrap();
+        let base64_data = &res_data[0];
 
-            assert_eq!(bytes, data);
-            assert_eq!(namespaced_data_response.height.unwrap(), height);
-        }
+        let bytes = general_purpose::STANDARD
+            .decode(base64_data).unwrap();
+
+        assert_eq!(bytes, data);
+        assert_eq!(namespaced_data_response.height.unwrap(), height);
     }
 }
