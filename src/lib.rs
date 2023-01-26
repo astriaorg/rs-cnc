@@ -101,7 +101,6 @@ impl CelestiaNodeClient {
         })
     }
 
-    #[tokio::main]
     pub async fn submit_pay_for_data(
         &self,
         namespace_id: &[u8; 8],
@@ -135,7 +134,6 @@ impl CelestiaNodeClient {
         Ok(response)
     }
 
-    #[tokio::main]
     pub async fn namespaced_data(
         &self,
         namespace_id: [u8; 8],

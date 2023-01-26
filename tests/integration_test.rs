@@ -6,8 +6,8 @@ use rand::Rng;
 use rs_cnc::{CelestiaNodeClient, NamespacedDataResponse, PayForDataResponse};
 
 
-#[test]
-fn test_data_roundtrip() {
+#[tokio::test]
+async fn test_data_roundtrip() {
     let base_url = String::from("http://localhost:26659");
     let client = CelestiaNodeClient::new(base_url).unwrap();
 
@@ -21,13 +21,13 @@ fn test_data_roundtrip() {
         &random_namespace_id,
         &data,
         2_000,
-        90_000);
+        90_000).await;
 
     assert!(res.is_ok());
 
     // use height from previous response to call namespaced data endpoint
     if let Some(height) = res.unwrap().height {
-        let res: Result<NamespacedDataResponse, reqwest::Error> = client.namespaced_data(random_namespace_id, height);
+        let res: Result<NamespacedDataResponse, reqwest::Error> = client.namespaced_data(random_namespace_id, height).await;
         assert!(res.is_ok());
 
         if let namespaced_data_response = res.unwrap() {
