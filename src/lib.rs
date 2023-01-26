@@ -26,6 +26,7 @@ struct PayForDataRequest {
     gas_limit: u64,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, Debug)]
 pub struct PayForDataResponse {
     /// The block height.
@@ -50,6 +51,7 @@ pub struct PayForDataResponse {
     gas_used: Option<u64>,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, Debug)]
 pub struct Event {
     #[serde(rename = "type")]
@@ -57,12 +59,14 @@ pub struct Event {
     attributes: Vec<Attribute>,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, Debug)]
 pub struct Log {
     msg_index: u64,
     events: Option<Vec<Event>>,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, Debug)]
 pub struct Attribute {
     key: String,
