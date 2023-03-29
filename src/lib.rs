@@ -111,7 +111,7 @@ pub struct CelestiaNodeClient {
 impl CelestiaNodeClient {
     /// Creates a `CelestiaNodeClientBuilder` to configure a `CelestiaNodeClient`.
     pub fn builder() -> CelestiaNodeClientBuilder {
-        CelestiaNodeClientBuilder::new()        
+        CelestiaNodeClientBuilder::new()
     }
     /// Creates a new client
     ///
@@ -285,6 +285,9 @@ mod tests {
     #[test]
     fn constructing_client_without_base_url_is_err() {
         let err = CelestiaNodeClient::builder().build().unwrap_err();
-        assert_eq!("base_url on CelestiaNodeClientBuilder not set", err.to_string());
+        assert_eq!(
+            "base_url on CelestiaNodeClientBuilder not set",
+            err.to_string()
+        );
     }
 }
