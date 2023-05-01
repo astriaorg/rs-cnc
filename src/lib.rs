@@ -13,7 +13,7 @@ pub mod types;
 // TODO - organize
 const NAMESPACED_DATA_ENDPOINT: &str = "namespaced_data/";
 const NAMESPACED_SHARES_ENDPOINT: &str = "namespaced_shares/";
-const SUBMIT_PFD_ENDPOINT: &str = "submit_pfd/";
+const SUBMIT_PFD_ENDPOINT: &str = "submit_pfd";
 
 #[derive(Serialize, Debug)]
 struct PayForDataRequest {
@@ -373,8 +373,7 @@ mod tests {
         let endpoints = CelestiaNodeEndpoints::try_from_url(&base_url).unwrap();
         let namespace_id = "123";
         let height = 4;
-        let expected_url =
-            format!("{base_url}{NAMESPACED_DATA_ENDPOINT}{namespace_id}/height/{height}");
+        let expected_url = "http://localdev.me/celestia/namespaced_data/123/height/4";
         let actual_url = endpoints
             .to_namespaced_data_url(namespace_id, height)
             .unwrap();
@@ -387,11 +386,18 @@ mod tests {
         let endpoints = CelestiaNodeEndpoints::try_from_url(&base_url).unwrap();
         let namespace_id = "123";
         let height = 4;
-        let expected_url =
-            format!("{base_url}{NAMESPACED_SHARES_ENDPOINT}{namespace_id}/height/{height}");
+        let expected_url = "http://localdev.me/celestia/namespaced_shares/123/height/4";
         let actual_url = endpoints
             .to_namespaced_shares_url(namespace_id, height)
             .unwrap();
         assert_eq!(expected_url, actual_url.as_str());
+    }
+
+    #[test]
+    fn submit_pfd_is_as_expected() {
+        let base_url = Url::parse("http://localdev.me/celestia/").unwrap();
+        let endpoints = CelestiaNodeEndpoints::try_from_url(&base_url).unwrap();
+        let expected_url = "http://localdev.me/celestia/submit_pfd";
+        assert_eq!(expected_url, endpoints.submit_pfd.as_str());
     }
 }
