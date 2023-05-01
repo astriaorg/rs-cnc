@@ -124,6 +124,18 @@ impl CelestiaNodeEndpoints {
             submit_pfd,
         })
     }
+
+    fn to_namespaced_data_url(&self, namespace_id: &str, height: u64) -> eyre::Result<Url> {
+        self.namespaced_data
+            .join(&format!("{namespace_id}/height/{height}"))
+            .wrap_err("failed constructing namespaced data request URL")
+    }
+
+    fn to_namespaced_shares_url(&self, namespace_id: &str, height: u64) -> eyre::Result<Url> {
+        self.namespaced_shares
+            .join(&format!("{namespace_id}/height/{height}"))
+            .wrap_err("failed constructing namespaced shares request URL")
+    }
 }
 
 #[derive(Debug)]
@@ -204,8 +216,7 @@ impl CelestiaNodeClient {
     ) -> eyre::Result<NamespacedSharesResponse> {
         let url = self
             .endpoints
-            .namespaced_shares
-            .join(&format!("{namespace_id}/height/{height}"))
+            .to_namespaced_shares_url(namespace_id, height)
             .wrap_err("failed constructing URL for namespaced shares endpoint")?;
 
         let response = self
@@ -222,8 +233,7 @@ impl CelestiaNodeClient {
     ) -> eyre::Result<NamespacedDataResponse> {
         let url = self
             .endpoints
-            .namespaced_data
-            .join(&format!("{namespace_id}/height/{height}"))
+            .to_namespaced_data_url(namespace_id, height)
             .wrap_err("failed constructing URL for namspaced data endpoint")?;
 
         let response = self
@@ -355,5 +365,33 @@ mod tests {
         assert_eq!(namespaced_data, endpoints.namespaced_data.as_str());
         assert_eq!(namespaced_shares, endpoints.namespaced_shares.as_str());
         assert_eq!(submit_pfd, endpoints.submit_pfd.as_str());
+    }
+
+    #[test]
+    fn namespaced_data_request_url_is_as_expected() {
+        let base_url = Url::parse("http://localdev.me/celestia/").unwrap();
+        let endpoints = CelestiaNodeEndpoints::try_from_url(&base_url).unwrap();
+        let namespace_id = "123";
+        let height = 4;
+        let expected_url =
+            format!("{base_url}{NAMESPACED_DATA_ENDPOINT}{namespace_id}/height/{height}");
+        let actual_url = endpoints
+            .to_namespaced_data_url(namespace_id, height)
+            .unwrap();
+        assert_eq!(expected_url, actual_url.as_str());
+    }
+
+    #[test]
+    fn namespaced_shares_request_url_is_as_expected() {
+        let base_url = Url::parse("http://localdev.me/celestia/").unwrap();
+        let endpoints = CelestiaNodeEndpoints::try_from_url(&base_url).unwrap();
+        let namespace_id = "123";
+        let height = 4;
+        let expected_url =
+            format!("{base_url}{NAMESPACED_SHARES_ENDPOINT}{namespace_id}/height/{height}");
+        let actual_url = endpoints
+            .to_namespaced_shares_url(namespace_id, height)
+            .unwrap();
+        assert_eq!(expected_url, actual_url.as_str());
     }
 }
