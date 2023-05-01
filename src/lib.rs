@@ -205,11 +205,11 @@ impl CelestiaNodeClient {
         let url = self
             .endpoints
             .namespaced_shares
-            .join(&format!("{namespace_id}/{height}/{height}"))
+            .join(&format!("{namespace_id}/height/{height}"))
             .wrap_err("failed constructing URL for namespaced shares endpoint")?;
 
         let response = self
-            .do_get::<NamespacedSharesResponse, _>(url)
+            .do_get(url)
             .await
             .wrap_err("failed getting namespaced shares from server")?;
         Ok(response)
@@ -227,7 +227,7 @@ impl CelestiaNodeClient {
             .wrap_err("failed constructing URL for namspaced data endpoint")?;
 
         let response = self
-            .do_get::<NamespacedDataResponse, _>(url)
+            .do_get(url)
             .await
             .wrap_err("failed getting namespaced data from server")?;
         Ok(response)
