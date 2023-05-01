@@ -320,7 +320,12 @@ impl CelestiaNodeClientBuilder {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use reqwest::Url;
+
+    use super::{
+        CelestiaNodeClient, CelestiaNodeEndpoints, NAMESPACED_DATA_ENDPOINT,
+        NAMESPACED_SHARES_ENDPOINT, SUBMIT_PFD_ENDPOINT,
+    };
 
     #[test]
     fn constructing_client_without_base_url_is_err() {
@@ -329,5 +334,26 @@ mod tests {
             "base_url on CelestiaNodeClientBuilder not set",
             err.to_string()
         );
+    }
+
+    #[test]
+    fn base_url_is_made_into_proper_base_with_slash() {
+        let url_without_trailing_slash = "http://localdev.me/celestia";
+        let url_with_trailing_slash = format!("{url_without_trailing_slash}/");
+
+        let client = CelestiaNodeClient::new("http://localdev.me/celestia").unwrap();
+        assert_eq!(&url_with_trailing_slash, client.base_url.as_str());
+    }
+
+    #[test]
+    fn all_endpoints_are_proper_bases() {
+        let base_url = Url::parse("http://localdev.me/celestia/").unwrap();
+        let endpoints = CelestiaNodeEndpoints::try_from_url(&base_url).unwrap();
+        let namespaced_data = format!("{base_url}{NAMESPACED_DATA_ENDPOINT}");
+        let namespaced_shares = format!("{base_url}{NAMESPACED_SHARES_ENDPOINT}");
+        let submit_pfd = format!("{base_url}{SUBMIT_PFD_ENDPOINT}");
+        assert_eq!(namespaced_data, endpoints.namespaced_data.as_str());
+        assert_eq!(namespaced_shares, endpoints.namespaced_shares.as_str());
+        assert_eq!(submit_pfd, endpoints.submit_pfd.as_str());
     }
 }
