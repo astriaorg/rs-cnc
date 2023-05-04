@@ -110,13 +110,13 @@ impl CelestiaNodeEndpoints {
     fn try_from_url(url: &Url) -> eyre::Result<Self> {
         let namespaced_data = url
             .join(NAMESPACED_DATA_ENDPOINT)
-            .wrap_err("failed creating URL for namespaced data endpoind")?;
+            .wrap_err("failed creating URL for namespaced data endpoint")?;
         let namespaced_shares = url
             .join(NAMESPACED_SHARES_ENDPOINT)
-            .wrap_err("failed creating URL for namespaced shares endpoind")?;
+            .wrap_err("failed creating URL for namespaced shares endpoint")?;
         let submit_pfd = url
             .join(SUBMIT_PFD_ENDPOINT)
-            .wrap_err("failed creating URL for submit pfd endpoind")?;
+            .wrap_err("failed creating URL for submit pfd endpoint")?;
 
         Ok(Self {
             namespaced_shares,
