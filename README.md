@@ -1,19 +1,13 @@
-# rs-cnc
+# `rs-cnc` is Archived
 
-celestia-node REST client in Rust.
+This repository has been archived and is no longer actively maintained. The project has been consolidated into a mono repository for better management and synergy between related projects.
 
-### Testing
+## New Location
 
-TODO - use something like `dockertest`
+[You can find the content of this repository in our new mono repository here](https://github.com/astriaorg/astria/tree/main/crates/astria-rs-cnc)
 
-- `$ docker-compose -f tests/docker/test-docker-compose.yml up bridge0`
-- `$ cargo test -- --nocapture --color always`
+## Issues and Pull Requests
 
-### Debugging
+Please direct new issues and pull requests to the new mono repository.
 
-- vscode
-    - plugins needed:
-        - https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
-        - https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb
-    - launch.json already included in the repo
-        - found in https://gist.github.com/xanathar/c7c83e6d53b72dd4464f695607012629
+Thank you for your contributions and support. We look forward to seeing you in the new repository!
